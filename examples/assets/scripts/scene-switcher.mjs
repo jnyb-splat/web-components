@@ -10,6 +10,14 @@ import { Entity, Script } from 'playcanvas';
  *       "flipbook": { "folder": "https://...", "filenamePattern": "{frame:03}.compressed.ply",
  *                     "startFrame": 1, "endFrame": 149, "fps": 30, "playMode": "bounce" } }
  *
+ * Each flipbook scene has its own `folder`, so a list can hold any number of sequences.
+ *
+ * A scene can also bring its own surroundings, applied when it becomes visible:
+ * - `sky`: attributes for the page's `pc-sky`, e.g. { "asset": "studio", "center": "0 0.3 0",
+ *   "scale": "5 5 5", "lighting": true }.
+ * - `environment`: the name of one child of the {@link SceneSwitcher#environments} entity to
+ *   enable (e.g. a studio set with lights and a shadow catcher); its siblings are disabled.
+ *
  * Switching:
  * - XR controllers: the secondary face button (gamepad button 5) - B on the right controller for
  *   the next scene, Y on the left for the previous one. Trigger, grip and thumbsticks belong to
@@ -48,6 +56,14 @@ export class SceneSwitcher extends Script {
      * @type {number}
      */
     buttonIndex = 5;
+
+    /**
+     * Name of the entity whose children are the per-scene environments. Optional.
+     *
+     * @attribute
+     * @type {string}
+     */
+    environments = '';
 
     /** @type {Entity|null} */
     _current = null;
@@ -138,11 +154,41 @@ export class SceneSwitcher extends Script {
     }
 
     _replace(entity) {
-        // Destroying the old entity also destroys its flipbook script, which releases its frames
-        this._current?.destroy();
+        // Add the new scene before destroying the old one: destroying a flipbook releases its
+        // frames from the shared cache, and a following flipbook may reuse some of them
+        const previous = this._current;
         this._current = entity;
         this.entity.addChild(entity);
-        this.app.fire('scene:changed', this._index, this.scenes[this._index]);
+        previous?.destroy();
+
+        const scene = this.scenes[this._index];
+        this._applySurroundings(scene);
+        this.app.fire('scene:changed', this._index, scene);
+    }
+
+    _applySurroundings(scene) {
+        const sky = scene.sky && document.querySelector('pc-sky');
+        if (sky) {
+            // Set the asset last: loading it regenerates the sky with the other attributes
+            const { asset, ...rest } = scene.sky;
+            for (const [name, value] of Object.entries(rest)) {
+                if (value === false) {
+                    sky.removeAttribute(name);
+                } else {
+                    sky.setAttribute(name, value === true ? '' : String(value));
+                }
+            }
+            if (asset && sky.getAttribute('asset') !== asset) {
+                sky.setAttribute('asset', asset);
+            }
+        }
+
+        const environments = this.environments && this.app.root.findByName(this.environments);
+        if (environments) {
+            for (const child of environments.children) {
+                child.enabled = child.name === scene.environment;
+            }
+        }
     }
 
     _createEntity(scene) {
