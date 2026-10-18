@@ -1,8 +1,11 @@
 import { Entity, Script } from 'playcanvas';
 
+/** @import { Asset } from 'playcanvas' */
+
 /**
  * Cycles through a list of Gaussian splat scenes, each shown as a child entity of this script's
- * entity. A scene is either a single splat, referenced by the id of its `pc-asset`, or a flipbook
+ * entity. The list comes from {@link SceneSwitcher#scenes}, or from a JSON asset
+ * ({@link SceneSwitcher#scenesAsset}) holding `{ "scenes": [...] }`. A scene is either a single splat, referenced by the id of its `pc-asset`, or a flipbook
  * sequence (needs the gsplatFlipbook script asset to be loaded):
  *
  *     { "name": "Angel", "asset": "angel", "position": "0 1 0", "rotation": "0 -45 180", "scale": "1 1 1" }
@@ -10,7 +13,8 @@ import { Entity, Script } from 'playcanvas';
  *       "flipbook": { "folder": "https://...", "filenamePattern": "{frame:03}.compressed.ply",
  *                     "startFrame": 1, "endFrame": 149, "fps": 30, "playMode": "bounce" } }
  *
- * Each flipbook scene has its own `folder`, so a list can hold any number of sequences.
+ * Each flipbook scene has its own `folder`, so a list can hold any number of sequences. A scene
+ * with `"disabled": true` is skipped.
  *
  * A scene can also bring its own surroundings, applied when it becomes visible:
  * - `sky`: attributes for the page's `pc-sky`, e.g. { "asset": "studio", "center": "0 0.3 0",
@@ -40,6 +44,14 @@ export class SceneSwitcher extends Script {
      * @type {object[]}
      */
     scenes = [];
+
+    /**
+     * A JSON asset with `{ "scenes": [...] }`. When set, it replaces {@link SceneSwitcher#scenes}.
+     *
+     * @attribute
+     * @type {Asset|null}
+     */
+    scenesAsset = null;
 
     /**
      * Index of the scene shown first.
@@ -76,6 +88,11 @@ export class SceneSwitcher extends Script {
     _wasPressed = new Map();
 
     initialize() {
+        if (this.scenesAsset) {
+            this.scenes = this.scenesAsset.resource?.scenes ?? [];
+        }
+        this.scenes = this.scenes.filter(scene => !scene.disabled);
+
         this._onNext = () => this.show(this._index + 1);
         this._onPrev = () => this.show(this._index - 1);
         this._onKeyDown = (e) => {

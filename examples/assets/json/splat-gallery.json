@@ -1,0 +1,101 @@
+{
+    "scenes": [
+        {
+            "name": "Angel",
+            "asset": "angel",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "Angel Kneeling",
+            "asset": "angel-kneeling",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "Angel With Candlestick",
+            "asset": "angel-with-candlestick",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "Massa",
+            "asset": "massa",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "Narcissus",
+            "asset": "narcissus",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "St Peter",
+            "asset": "st-peter",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "Trumpet",
+            "asset": "trumpet",
+            "position": "0 1 0",
+            "rotation": "0 45 180",
+            "sky": {
+                "asset": "rotunda",
+                "center": "0 0.1 0",
+                "scale": "20 20 20"
+            }
+        },
+        {
+            "name": "Basketball",
+            "rotation": "0 -90 180",
+            "castShadows": true,
+            "environment": "studio",
+            "sky": {
+                "asset": "studio",
+                "center": "0 0.15 0",
+                "scale": "12 12 12"
+            },
+            "flipbook": {
+                "fps": 30,
+                "folder": "https://code.playcanvas.com/examples_data/example_basketball_02",
+                "filenamePattern": "{frame:03}.compressed.ply",
+                "startFrame": 1,
+                "endFrame": 149,
+                "playMode": "bounce",
+                "playing": true
+            }
+        }
+    ]
+}

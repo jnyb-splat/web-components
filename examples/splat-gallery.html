@@ -27,6 +27,8 @@
             <pc-asset src="../node_modules/playcanvas/scripts/esm/xr/xr-session.mjs"></pc-asset>
             <pc-asset src="assets/scripts/scene-switcher.mjs"></pc-asset>
             <pc-asset src="assets/fonts/arial.json" type="font" id="arial-font"></pc-asset>
+            <!-- Scene list: edit it with utils/splat-gallery.py -->
+            <pc-asset src="assets/json/splat-gallery.json" id="gallery-scenes"></pc-asset>
             <!-- Skies: each scene picks its own -->
             <pc-asset src="assets/skies/sepulchral-chapel-rotunda-4k.webp" id="rotunda"></pc-asset>
             <pc-asset src="assets/skies/octagon-lamps-photo-studio-2k.hdr" id="studio" lazy></pc-asset>
@@ -94,44 +96,12 @@
                     </pc-entity>
                 </pc-entity>
                 <!-- Gallery: switch scenes with B (right controller) / Y (left), the XR menu, or N / P keys.
-                     A scene is a pc-asset splat or a flipbook sequence (one folder per scene). -->
+                     The scenes (pc-asset splats or flipbook folders) are listed in assets/json/splat-gallery.json. -->
                 <pc-entity name="gallery">
                     <pc-script>
-                        <pc-script-instance name="sceneSwitcher" attributes='{
-                            "environments": "environments",
-                            "scenes": [
-                                {"name": "Angel", "asset": "angel", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {"name": "Angel Kneeling", "asset": "angel-kneeling", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {"name": "Angel With Candlestick", "asset": "angel-with-candlestick", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {"name": "Massa", "asset": "massa", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {"name": "Narcissus", "asset": "narcissus", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {"name": "St Peter", "asset": "st-peter", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {"name": "Trumpet", "asset": "trumpet", "position": "0 1 0", "rotation": "0 45 180",
-                                 "sky": {"asset": "rotunda", "center": "0 0.1 0", "scale": "20 20 20"}},
-                                {
-                                    "name": "Basketball",
-                                    "rotation": "0 -90 180",
-                                    "castShadows": true,
-                                    "environment": "studio",
-                                    "sky": {"asset": "studio", "center": "0 0.15 0", "scale": "12 12 12"},
-                                    "flipbook": {
-                                        "fps": 30,
-                                        "folder": "https://code.playcanvas.com/examples_data/example_basketball_02",
-                                        "filenamePattern": "{frame:03}.compressed.ply",
-                                        "startFrame": 1,
-                                        "endFrame": 149,
-                                        "playMode": "bounce",
-                                        "playing": true
-                                    }
-                                }
-                            ]
-                        }'></pc-script-instance>
+                        <pc-script-instance name="sceneSwitcher"
+                                            environments="environments"
+                                            scenes-asset="asset:gallery-scenes"></pc-script-instance>
                     </pc-script>
                 </pc-entity>
             </pc-scene>
